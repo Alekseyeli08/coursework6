@@ -1,0 +1,94 @@
+{% extends 'home.html' %}
+{% load my_tags %}
+{% block content %}
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        <div class="row">
+            {% for object in random_block %}
+            <div class="col-md-4">
+                <div class="card mb-3 box-shadow">
+                    <img src="{{ object.image| media_filter }}">
+                    <div class="card-body">
+                        <p class="card-text">Заголовок: {{ object.title }} ({{ object.slug }}).</p>
+                        <p class="card-text"><small class="text-body-secondary">Описание: {{ object.content }}</small></p>
+                        <p class="card-text">Дата создания: {{ object.created_at }}.</p>
+                             <small class="text-body">Просмотры: {{ object.count_views }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+<p class="lead my-3">Количество рассылок: {{ all_mailing.count }}</p>
+<p class="lead my-3">Количество активных рассылок: {{ active_mailing.count }}</p>
+<p class="lead my-3">Количество клиентов: {{ clients.count }}</p>
+<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+        <h1 class="display-4 fst-italic">Сайт для рассылок</h1>
+        <p class="lead my-3">Тут отображаются все активные рассылки</p>
+         <div class="d-grid gap-2 col-12 mx-auto">
+            <form method="POST" action="{% url 'mailing:call_custom_command' 1 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Выполнить единичную рассылки</button>
+            </form>
+            <form method="POST" action="{% url 'mailing:call_custom_command' 2 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Запустить рассылки</button>
+                </form>
+    </div>
+</div>
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+
+    <a class="nav-link {{ active }}" aria-current="page" href="{% url 'mailing:home' %}">Активные</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{ inactive }}" href="{% url 'mailing:mailing_list2' %}">Неактивные</a>
+  </li>
+</ul>
+
+<div class="row mb-2">
+    {% for mailin in object_list %}
+    <div class="col-md-6">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-primary-emphasis">{{ mailin.message.letter_theme }}</strong>
+                <h5 class="mb-0">Создатель: {{ mailin.owner }}</h5>
+                <div class="mb-1 text-body-secondary">Начало: {{ mailin.start_time }}</div>
+                <div class="mb-1 text-body-secondary">Конец: {{ mailin.end_time }}</div>
+                <div class="mb-1 text-body-secondary">След. рассылка: {{ mailin.next_time_mailing }}</div>
+                <p class="card-text mb-auto"></p>
+                <a href="{% url 'mailing:mailing_update' mailin.pk %}"
+                   class="button">
+                    Редактировать
+                </a>
+                <a href="{% url 'mailing:mailing_detail' mailin.pk %}"
+                   class="button">
+                    Посмотреть
+                </a>
+                {% if perms.mailing.mailing_delete %}
+                <a href="{% url 'mailing:mailing_delete' mailin.pk %}"
+                   class="button">
+                    Удалить
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-auto d-none d-lg-block">
+                <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img"
+                     aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                    Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"/>
+                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
