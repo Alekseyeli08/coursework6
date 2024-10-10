@@ -4,7 +4,9 @@
 
 <div class="my-6 p-6 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0">Список клиентов</h6>
+
     {% for client in object_list %}
+    {% if perms.mailing.view_client or user == client.owner %}
     <div class="d-flex text-body-secondary pt-3">
 
         <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
@@ -32,6 +34,8 @@
  </div>
 
      </div>
+    {% endif %}
     {% endfor %}
+
 </div>
 {% endblock %}

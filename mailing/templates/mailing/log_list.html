@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+{% block content %}
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        <div class="row">
+            {% for object in object_list %}
+            <div class="col-md-4">
+                <div class="card mb-3 box-shadow">
+                    <div class="card-body">
+                        <p class="card-text">Статус попытки: {{ object.get_status_log_display }}.</p>
+                        <p class="card-text">Ответ сервера: {{ object.server_response }}.</p>
+                        <p class="card-text">Рассылка: {{ object.mailing }}.</p>
+                        <p class="card-text">Время последней рассылки: {{ object.log_time }}.</p>
+                        <p class="card-text">Владелец: {{ object.owner }}.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

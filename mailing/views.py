@@ -1,12 +1,12 @@
 import random
-
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from mailing.models import Mailing, Client, Message
+from mailing.models import Mailing, Client, Message, Log
 from django.urls import reverse_lazy, reverse
 from mailing.forms import MailingForm, ClientForm, MessageForm, MailingManagerForm
 from django.core.management import call_command
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from blog.models import Blog
 class MailingListView(LoginRequiredMixin, ListView):
@@ -83,7 +83,8 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
-    success_url = reverse_lazy("mailing:client_list")
+    permission_required = 'mailing.view_client'
+
 
 
 class ClientDetailView(DetailView):
@@ -154,3 +155,6 @@ def call_custom_command(request, command_id: int):
         elif command_id == 2:
             call_command('run_aps')
     return redirect(reverse('mailing:home'))
+
+class LogListView(LoginRequiredMixin, ListView):
+    model = Log

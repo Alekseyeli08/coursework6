@@ -187,11 +187,14 @@
       <a class="nav-item nav-link link-body-emphasis active" href="{% url 'mailing:home' %}">Главная</a>
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:mailing_create' %}">Cоздание рассылок</a>
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:client_create' %}">Создание клиентов</a>
+      {% if perms.mailing.view_client or client == client.owner %}
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:client_list' %}">Список клиентов</a>
+      {% endif %}
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:message_create' %}">Создание сообщений</a>
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:message_list' %}">Список сообщений</a>
       <a class="nav-item nav-link link-body-emphasis" href="{% url 'users:user_list' %}">Список пользователей</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Opinion</a>
+
+      <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:log_list' %}">Попытки рассылки</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Science</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Health</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Style</a>
